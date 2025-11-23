@@ -8,6 +8,7 @@ export const environment = {
   // Esempi:
   // - Railway: 'https://tuo-backend.railway.app/api/v1'
   // - EC2: 'http://tuo-ec2-ip:8000/api/v1' o 'https://tuo-dominio.com/api/v1'
-  apiUrl: 'https://your-backend-url.com/api/v1'
+  // - Local Docker: usa URL relativo per far fare il proxy a Nginx
+  apiUrl: '/api/v1'
 };
 
