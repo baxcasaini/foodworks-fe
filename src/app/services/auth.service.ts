@@ -25,11 +25,20 @@ export class AuthService {
   }
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
-    const formData = new FormData();
-    formData.append('username', credentials.username);
-    formData.append('password', credentials.password);
+    // FastAPI OAuth2PasswordRequestForm si aspetta application/x-www-form-urlencoded
+    const body = new URLSearchParams();
+    body.set('username', credentials.username);
+    body.set('password', credentials.password);
 
-    return this.http.post<LoginResponse>(`${API_URL}/auth/login`, formData).pipe(
+    return this.http.post<LoginResponse>(
+      `${API_URL}/auth/login`,
+      body.toString(),
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+    ).pipe(
       tap(response => {
         this.setToken(response.access_token);
         this.loadCurrentUser();
