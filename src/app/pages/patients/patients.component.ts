@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { HeaderComponent } from '../../components/header/header.component';
 import { PatientsService } from '../../services/patients.service';
@@ -25,38 +26,39 @@ import { ChurnIndicatorComponent } from '../../components/churn-indicator/churn-
     MatIconModule,
     MatCardModule,
     MatTooltipModule,
-    ChurnIndicatorComponent
+    ChurnIndicatorComponent,
+    TranslateModule
   ],
   template: `
     <div class="patients-container">
       <app-sidebar></app-sidebar>
       <div class="main-content">
-        <app-header subtitle="Gestione completa dei tuoi pazienti"></app-header>
+        <app-header [subtitle]="'patients.title' | translate"></app-header>
         <div class="content-area">
           <mat-card>
             <mat-card-header>
-              <mat-card-title>Lista Pazienti</mat-card-title>
+              <mat-card-title>{{ 'patients.list' | translate }}</mat-card-title>
             </mat-card-header>
             <mat-card-content>
-              <div *ngIf="loading" class="loading">Caricamento...</div>
+              <div *ngIf="loading" class="loading">{{ 'common.loading' | translate }}</div>
               <div *ngIf="!loading && patients.length === 0" class="no-data">
-                Nessun paziente trovato
+                {{ 'patients.noPatients' | translate }}
               </div>
               <table mat-table [dataSource]="patients" *ngIf="!loading && patients.length > 0" class="patients-table">
                 <ng-container matColumnDef="name">
-                  <th mat-header-cell *matHeaderCellDef>Nome</th>
+                  <th mat-header-cell *matHeaderCellDef>{{ 'patients.name' | translate }}</th>
                   <td mat-cell *matCellDef="let patient">{{ patient.name }}</td>
                 </ng-container>
                 
                 <ng-container matColumnDef="last_access">
-                  <th mat-header-cell *matHeaderCellDef>Ultimo Accesso</th>
+                  <th mat-header-cell *matHeaderCellDef>{{ 'patients.lastAccess' | translate }}</th>
                   <td mat-cell *matCellDef="let patient">
                     {{ getFormattedDate(patient.last_access) }}
                   </td>
                 </ng-container>
                 
                 <ng-container matColumnDef="churn">
-                  <th mat-header-cell *matHeaderCellDef>Rischio Abbandono</th>
+                  <th mat-header-cell *matHeaderCellDef>{{ 'patients.churnScore' | translate }}</th>
                   <td mat-cell *matCellDef="let patient">
                     <app-churn-indicator 
                       [score]="patient.churn_score" 
@@ -66,9 +68,9 @@ import { ChurnIndicatorComponent } from '../../components/churn-indicator/churn-
                 </ng-container>
                 
                 <ng-container matColumnDef="actions">
-                  <th mat-header-cell *matHeaderCellDef>Azioni</th>
+                  <th mat-header-cell *matHeaderCellDef>{{ 'patients.actions' | translate }}</th>
                   <td mat-cell *matCellDef="let patient">
-                    <button mat-icon-button (click)="viewPatient(patient.chat_id); $event.stopPropagation()" matTooltip="Visualizza dettagli">
+                    <button mat-icon-button (click)="viewPatient(patient.chat_id); $event.stopPropagation()" [matTooltip]="'patients.viewDetails' | translate">
                       <mat-icon>visibility</mat-icon>
                     </button>
                   </td>

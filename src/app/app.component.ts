@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,16 @@ import { CommonModule } from '@angular/common';
   `,
   styles: []
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Foodworks Dashboard';
+
+  constructor(private translate: TranslateService) {}
+
+  ngOnInit(): void {
+    // Imposta la lingua di default
+    const savedLang = localStorage.getItem('language') || 'en';
+    this.translate.setDefaultLang('en');
+    this.translate.use(savedLang);
+  }
 }
 

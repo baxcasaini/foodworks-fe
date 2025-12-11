@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { PatientDetail } from '../../models/patient.model';
 import { ChurnIndicatorComponent } from '../churn-indicator/churn-indicator.component';
 import { MatCardModule } from '@angular/material/card';
@@ -14,6 +15,7 @@ Chart.register(...registerables);
   standalone: true,
   imports: [
     CommonModule,
+    TranslateModule,
     ChurnIndicatorComponent,
     MatCardModule,
     MatIconModule,
@@ -24,43 +26,43 @@ Chart.register(...registerables);
       <div class="info-grid">
         <mat-card class="info-card">
           <mat-card-header>
-            <mat-card-title>Informazioni Base</mat-card-title>
+            <mat-card-title>{{ 'patientOverview.basicInfo' | translate }}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             <div class="info-item">
               <mat-icon>person</mat-icon>
               <div>
-                <strong>Nome:</strong> {{ patient.name }}
+                <strong>{{ 'patientOverview.name' | translate }}:</strong> {{ patient.name }}
               </div>
             </div>
             <div class="info-item">
               <mat-icon>tag</mat-icon>
               <div>
-                <strong>Chat ID:</strong> {{ patient.chat_id }}
+                <strong>{{ 'patientOverview.chatId' | translate }}:</strong> {{ patient.chat_id }}
               </div>
             </div>
             <div class="info-item" *ngIf="patient.language">
               <mat-icon>language</mat-icon>
               <div>
-                <strong>Lingua:</strong> {{ patient.language }}
+                <strong>{{ 'patientOverview.language' | translate }}:</strong> {{ patient.language }}
               </div>
             </div>
             <div class="info-item">
               <mat-icon>calendar_today</mat-icon>
               <div>
-                <strong>Primo Accesso:</strong> {{ getFormattedDate(patient.first_access) }}
+                <strong>{{ 'patientOverview.firstAccess' | translate }}:</strong> {{ getFormattedDate(patient.first_access) }}
               </div>
             </div>
             <div class="info-item">
               <mat-icon>update</mat-icon>
               <div>
-                <strong>Ultimo Accesso:</strong> {{ getFormattedDate(patient.last_access) }}
+                <strong>{{ 'patientOverview.lastAccess' | translate }}:</strong> {{ getFormattedDate(patient.last_access) }}
               </div>
             </div>
             <div class="info-item" *ngIf="getDaysActive() > 0">
               <mat-icon>schedule</mat-icon>
               <div>
-                <strong>Giorni Attivo:</strong> {{ getDaysActive() }}
+                <strong>{{ 'patientOverview.activeDays' | translate }}:</strong> {{ getDaysActive() }}
               </div>
             </div>
           </mat-card-content>
@@ -68,7 +70,7 @@ Chart.register(...registerables);
 
         <mat-card class="churn-card">
           <mat-card-header>
-            <mat-card-title>Rischio Abbandono</mat-card-title>
+            <mat-card-title>{{ 'patientOverview.churnRisk' | translate }}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             <app-churn-indicator 
@@ -76,25 +78,25 @@ Chart.register(...registerables);
               [riskLevel]="patient.churn_info.risk_level">
             </app-churn-indicator>
             <div class="churn-details" *ngIf="patient.churn_info.details">
-              <h4>Dettagli Calcolo:</h4>
+              <h4>{{ 'patientOverview.calculationDetails' | translate }}:</h4>
               <div class="detail-item">
-                <span>Ultimo Accesso:</span>
+                <span>{{ 'patientOverview.lastAccessLabel' | translate }}:</span>
                 <span>{{ patient.churn_info.details.last_access_score }}%</span>
               </div>
               <div class="detail-item">
-                <span>Interazione:</span>
+                <span>{{ 'patientOverview.interaction' | translate }}:</span>
                 <span>{{ patient.churn_info.details.interaction_score }}%</span>
               </div>
               <div class="detail-item">
-                <span>Obiettivi:</span>
+                <span>{{ 'patientOverview.objectives' | translate }}:</span>
                 <span>{{ patient.churn_info.details.goal_score }}%</span>
               </div>
               <div class="detail-item">
-                <span>Feedback:</span>
+                <span>{{ 'patientOverview.feedback' | translate }}:</span>
                 <span>{{ patient.churn_info.details.feedback_score }}%</span>
               </div>
               <div class="detail-item">
-                <span>Metriche:</span>
+                <span>{{ 'patientOverview.metrics' | translate }}:</span>
                 <span>{{ patient.churn_info.details.metrics_score }}%</span>
               </div>
             </div>
@@ -106,48 +108,48 @@ Chart.register(...registerables);
         <mat-card class="stat-card">
           <mat-card-content>
             <div class="stat-value">{{ (patient.diets && patient.diets.length) || 0 }}</div>
-            <div class="stat-label">Piani Alimentari</div>
+            <div class="stat-label">{{ 'patientOverview.mealPlans' | translate }}</div>
           </mat-card-content>
         </mat-card>
 
         <mat-card class="stat-card">
           <mat-card-content>
             <div class="stat-value">{{ (patient.health_metrics && patient.health_metrics.length) || 0 }}</div>
-            <div class="stat-label">Metriche Registrate</div>
+            <div class="stat-label">{{ 'patientOverview.recordedMetrics' | translate }}</div>
           </mat-card-content>
         </mat-card>
 
         <mat-card class="stat-card">
           <mat-card-content>
             <div class="stat-value">{{ (patient.food_analyses && patient.food_analyses.length) || 0 }}</div>
-            <div class="stat-label">Analisi Cibo</div>
+            <div class="stat-label">{{ 'patientOverview.foodAnalyses' | translate }}</div>
           </mat-card-content>
         </mat-card>
       </div>
 
       <mat-card class="adherence-chart-card">
         <mat-card-header>
-          <mat-card-title>Indicatore di Aderenza al Piano</mat-card-title>
-          <mat-card-subtitle>Score composito basato su peso, pasti, HRV e interazioni</mat-card-subtitle>
+          <mat-card-title>{{ 'patientOverview.planAdherence' | translate }}</mat-card-title>
+          <mat-card-subtitle>{{ 'patientOverview.planAdherenceSubtitle' | translate }}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <div class="chart-container" *ngIf="adherenceChartData.labels && adherenceChartData.labels.length > 0">
             <canvas #adherenceChart></canvas>
           </div>
           <div class="no-chart-data" *ngIf="!adherenceChartData.labels || adherenceChartData.labels.length === 0">
-            <p>Dati insufficienti per calcolare l'aderenza al piano</p>
+            <p>{{ 'patientOverview.insufficientData' | translate }}</p>
           </div>
           <div class="adherence-info">
             <div class="info-badge">
-              <span class="label">Score Attuale:</span>
+              <span class="label">{{ 'patientOverview.currentScore' | translate }}:</span>
               <span class="value" [ngClass]="getAdherenceClass(currentAdherenceScore)">
                 {{ currentAdherenceScore.toFixed(1) }}/100
               </span>
             </div>
             <div class="info-badge">
-              <span class="label">Trend:</span>
+              <span class="label">{{ 'patientOverview.trend' | translate }}:</span>
               <span class="value" [ngClass]="getTrendClass()">
-                {{ getTrendLabel() }}
+                {{ getTrendLabel() | translate }}
               </span>
             </div>
           </div>
@@ -349,7 +351,7 @@ export class PatientOverviewComponent implements OnInit, OnChanges, AfterViewIni
       x: {
         title: {
           display: true,
-          text: 'Tempo'
+          text: 'Time'
         }
       }
     },
@@ -620,13 +622,14 @@ export class PatientOverviewComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   getTrendLabel(): string {
+    // Questo sarà tradotto nel template usando una pipe
     switch (this.adherenceTrend) {
       case 'positive':
-        return '↑ In Miglioramento';
+        return 'patientOverview.trendImproving';
       case 'negative':
-        return '↓ In Calo';
+        return 'patientOverview.trendDeclining';
       default:
-        return '→ Stabile';
+        return 'patientOverview.trendStable';
     }
   }
 }

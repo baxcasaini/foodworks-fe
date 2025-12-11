@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { HeaderComponent } from '../../components/header/header.component';
@@ -21,6 +22,7 @@ import { PatientPsychologicalMetricsComponent } from '../../components/patient-p
   standalone: true,
   imports: [
     CommonModule,
+    TranslateModule,
     RouterModule,
     SidebarComponent,
     HeaderComponent,
@@ -39,41 +41,41 @@ import { PatientPsychologicalMetricsComponent } from '../../components/patient-p
     <div class="patient-detail-container">
       <app-sidebar></app-sidebar>
       <div class="main-content">
-        <app-header [subtitle]="'Dettaglio paziente: ' + (patient?.name || 'Caricamento...')"></app-header>
+        <app-header [subtitle]="getPatientSubtitle()"></app-header>
         <div class="content-area">
           <button mat-icon-button (click)="goBack()" class="back-button">
             <mat-icon>arrow_back</mat-icon>
-            <span>Indietro</span>
+            <span>{{ 'patientDetail.goBack' | translate }}</span>
           </button>
 
           <div *ngIf="loading" class="loading-container">
             <mat-spinner></mat-spinner>
-            <p>Caricamento dati paziente...</p>
+            <p>{{ 'patientDetail.loadingPatient' | translate }}</p>
           </div>
 
           <div *ngIf="error" class="error-container">
             <mat-icon>error</mat-icon>
-            <p><strong>Errore:</strong> {{ error }}</p>
-            <p class="error-hint">Verifica che il backend sia in esecuzione su http://localhost:8000</p>
-            <button mat-button color="primary" (click)="loadPatient()">Riprova</button>
-            <button mat-button (click)="goBack()">Torna alla lista</button>
+            <p><strong>{{ 'patientDetail.error' | translate }}:</strong> {{ error }}</p>
+            <p class="error-hint">{{ 'patientDetail.errorLoading' | translate }}</p>
+            <button mat-button color="primary" (click)="loadPatient()">{{ 'common.retry' | translate }}</button>
+            <button mat-button (click)="goBack()">{{ 'patientDetail.backToList' | translate }}</button>
           </div>
 
           <div *ngIf="!loading && !error && patient" class="patient-content">
             <mat-tab-group>
-              <mat-tab label="Panoramica">
+              <mat-tab [label]="'patientDetail.overview' | translate">
                 <app-patient-overview [patient]="patient"></app-patient-overview>
               </mat-tab>
-              <mat-tab label="Metriche di Salute">
+              <mat-tab [label]="'patientDetail.healthMetrics' | translate">
                 <app-patient-metrics [patient]="patient"></app-patient-metrics>
               </mat-tab>
-              <mat-tab label="Piani Alimentari">
+              <mat-tab [label]="'patientDetail.mealPlans' | translate">
                 <app-patient-diets [patient]="patient"></app-patient-diets>
               </mat-tab>
-              <mat-tab label="Analisi Cibo">
+              <mat-tab [label]="'patientDetail.foodAnalyses' | translate">
                 <app-patient-analyses [patient]="patient"></app-patient-analyses>
               </mat-tab>
-              <mat-tab label="Metriche Psicologiche">
+              <mat-tab [label]="'patientDetail.psychologicalMetrics' | translate">
                 <app-patient-psychological-metrics [patient]="patient"></app-patient-psychological-metrics>
               </mat-tab>
             </mat-tab-group>
@@ -154,8 +156,16 @@ export class PatientDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private patientsService: PatientsService
+    private patientsService: PatientsService,
+    private translate: TranslateService
   ) {}
+
+  getPatientSubtitle(): string {
+    if (this.patient?.name) {
+      return this.translate.instant('patientDetail.title', { name: this.patient.name });
+    }
+    return this.translate.instant('common.loading');
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -164,7 +174,7 @@ export class PatientDetailComponent implements OnInit {
       if (this.chatId) {
         this.loadPatient();
       } else {
-        this.error = 'Chat ID non valido';
+        this.error = this.translate.instant('patientDetail.invalidChatId');
         this.loading = false;
       }
     });
@@ -172,7 +182,7 @@ export class PatientDetailComponent implements OnInit {
 
   loadPatient(): void {
     if (!this.chatId) {
-      this.error = 'Chat ID non specificato';
+      this.error = this.translate.instant('patientDetail.missingChatId');
       this.loading = false;
       return;
     }
@@ -193,7 +203,7 @@ export class PatientDetailComponent implements OnInit {
       error: (err) => {
         console.error('Error loading patient:', err);
         this.loading = false;
-        this.error = err.message || 'Errore nel caricamento dei dati del paziente. Verifica che il backend sia in esecuzione.';
+        this.error = err.message || this.translate.instant('patientDetail.errorLoading');
         this.patient = undefined;
       }
     });

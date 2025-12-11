@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatListModule, MatIconModule],
+  imports: [CommonModule, RouterModule, MatListModule, MatIconModule, TranslateModule],
   template: `
     <div class="sidebar">
       <div class="logo">
@@ -23,27 +24,27 @@ import { MatIconModule } from '@angular/material/icon';
         <mat-list>
           <mat-list-item [routerLink]="['/dashboard']" routerLinkActive="active">
             <mat-icon matListItemIcon>dashboard</mat-icon>
-            <span matListItemTitle>Dashboard</span>
+            <span matListItemTitle>{{ 'sidebar.dashboard' | translate }}</span>
           </mat-list-item>
           <mat-list-item [routerLink]="['/patients']" routerLinkActive="active">
             <mat-icon matListItemIcon>people</mat-icon>
-            <span matListItemTitle>Pazienti</span>
+            <span matListItemTitle>{{ 'sidebar.patients' | translate }}</span>
           </mat-list-item>
           <mat-list-item [routerLink]="['/agenda']" routerLinkActive="active">
             <mat-icon matListItemIcon>calendar_today</mat-icon>
-            <span matListItemTitle>Agenda</span>
+            <span matListItemTitle>{{ 'sidebar.agenda' | translate }}</span>
           </mat-list-item>
           <mat-list-item [routerLink]="['/nutrition']" routerLinkActive="active">
             <mat-icon matListItemIcon>restaurant</mat-icon>
-            <span matListItemTitle>Nutrizione</span>
+            <span matListItemTitle>{{ 'sidebar.nutrition' | translate }}</span>
           </mat-list-item>
           <mat-list-item [routerLink]="['/analytics']" routerLinkActive="active">
             <mat-icon matListItemIcon>analytics</mat-icon>
-            <span matListItemTitle>Analisi dati</span>
+            <span matListItemTitle>{{ 'sidebar.analytics' | translate }}</span>
           </mat-list-item>
           <mat-list-item [routerLink]="['/settings']" routerLinkActive="active">
             <mat-icon matListItemIcon>settings</mat-icon>
-            <span matListItemTitle>Impostazioni</span>
+            <span matListItemTitle>{{ 'sidebar.settings' | translate }}</span>
           </mat-list-item>
         </mat-list>
       </nav>

@@ -1,0 +1,208 @@
+{
+  "common": {
+    "logout": "Logout",
+    "loading": "Caricamento...",
+    "error": "Errore",
+    "save": "Salva",
+    "cancel": "Annulla",
+    "delete": "Elimina",
+    "edit": "Modifica",
+    "view": "Visualizza",
+    "close": "Chiudi",
+    "confirm": "Conferma",
+    "yes": "Sì",
+    "no": "No"
+  },
+  "header": {
+    "greeting": "Buongiorno, {{name}}",
+    "logout": "Logout"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "patients": "Pazienti",
+    "agenda": "Agenda",
+    "nutrition": "Nutrizione",
+    "analytics": "Analisi dati",
+    "settings": "Impostazioni"
+  },
+  "login": {
+    "title": "Foodworks Dashboard",
+    "subtitle": "Accedi come nutrizionista",
+    "username": "Username",
+    "password": "Password",
+    "usernameRequired": "Username obbligatorio",
+    "passwordRequired": "Password obbligatoria",
+    "loginButton": "Accedi",
+    "loggingIn": "Accesso in corso...",
+    "invalidCredentials": "Credenziali non valide. Riprova."
+  },
+  "dashboard": {
+    "title": "Ecco il Triage Metabolico di oggi. Hai {{count}} pazienti che richiedono attenzione.",
+    "urgentCriticalities": "Criticità urgenti",
+    "plansToReview": "Piani da revisionare",
+    "patientRetention": "Retention pazienti",
+    "patients": "Pazienti",
+    "noPatients": "Nessun paziente trovato nel database",
+    "loadingMetrics": "Caricamento metriche...",
+    "errorLoadingMetrics": "Errore nel caricamento delle metriche: {{error}}",
+    "errorLoadingPatients": "Errore nel caricamento dei pazienti: {{error}}",
+    "errorSendingCheckin": "Errore nell'invio del check-in",
+    "errorSendingMessage": "Errore nell'invio del messaggio",
+    "quickCheckin": "Check-in Rapido",
+    "modifyPlan": "Modifica piano",
+    "highFive": "Batti 5 👋",
+    "checkinSuccess": "Check-in rapido inviato con successo",
+    "highFiveSuccess": "Batti 5 inviato! 👋"
+  },
+  "churn": {
+    "high": "ALTO",
+    "medium": "MEDIO",
+    "low": "BASSO",
+    "unknown": "SCONOSCIUTO"
+  },
+  "patientIssues": {
+    "weightUnchanged": "Peso invariato da {{days}} giorni",
+    "planToReview": "Piano da revisionare",
+    "personalHRVRecord": "Record Personale HRV",
+    "highAbandonmentRisk": "Alto rischio abbandono",
+    "monitoringNeeded": "Monitoraggio necessario",
+    "noProblemDetected": "Nessun problema rilevato"
+  },
+  "patients": {
+    "title": "Pazienti",
+    "list": "Lista Pazienti",
+    "name": "Nome",
+    "lastAccess": "Ultimo Accesso",
+    "churnScore": "Churn Score",
+    "riskLevel": "Livello Rischio",
+    "actions": "Azioni",
+    "viewDetails": "Visualizza dettagli",
+    "noPatients": "Nessun paziente trovato",
+    "loading": "Caricamento pazienti...",
+    "error": "Errore nel caricamento dei pazienti"
+  },
+  "patientDetail": {
+    "title": "Dettaglio paziente: {{name}}",
+    "loading": "Caricamento...",
+    "overview": "Panoramica",
+    "healthMetrics": "Metriche di Salute",
+    "mealPlans": "Piani Alimentari",
+    "foodAnalyses": "Analisi Cibo",
+    "psychologicalMetrics": "Metriche Psicologiche",
+    "churnRisk": "Rischio Churn",
+    "planAdherence": "Aderenza al Piano",
+    "loadingPatient": "Caricamento dati paziente...",
+    "error": "Errore",
+    "errorLoading": "Errore nel caricamento dei dati del paziente. Verifica che il backend sia in esecuzione su http://localhost:8000",
+    "backToList": "Torna alla lista",
+    "goBack": "Indietro",
+    "invalidChatId": "Chat ID non valido",
+    "missingChatId": "Chat ID non specificato"
+  },
+  "patientOverview": {
+    "basicInfo": "Informazioni Base",
+    "name": "Nome",
+    "chatId": "Chat ID",
+    "language": "Lingua",
+    "firstAccess": "Primo Accesso",
+    "lastAccess": "Ultimo Accesso",
+    "activeDays": "Giorni Attivo",
+    "churnRisk": "Rischio Abbandono",
+    "calculationDetails": "Dettagli Calcolo",
+    "lastAccessLabel": "Ultimo Accesso",
+    "interaction": "Interazione",
+    "objectives": "Obiettivi",
+    "feedback": "Feedback",
+    "metrics": "Metriche",
+    "mealPlans": "Piani Alimentari",
+    "recordedMetrics": "Metriche Registrate",
+    "foodAnalyses": "Analisi Cibo",
+    "planAdherence": "Indicatore di Aderenza al Piano",
+    "planAdherenceSubtitle": "Score composito basato su peso, pasti, HRV e interazioni",
+    "insufficientData": "Dati insufficienti per calcolare l'aderenza al piano",
+    "currentScore": "Score Attuale",
+    "trend": "Trend",
+    "trendImproving": "↑ In Miglioramento",
+    "trendDeclining": "↓ In Calo",
+    "trendStable": "→ Stabile"
+  },
+  "patientMetrics": {
+    "weightTrend": "Andamento Peso",
+    "hrvTitle": "HRV (Heart Rate Variability)",
+    "statistics": "Statistiche",
+    "averageWeight": "Peso Medio",
+    "weightVariation": "Variazione Peso",
+    "averageHRV": "HRV Medio",
+    "totalRegistrations": "Totale Registrazioni",
+    "completeHistory": "Storico Completo",
+    "weight": "Peso (kg)",
+    "hrv": "HRV (ms)",
+    "bodyFat": "Grasso Corporeo (%)",
+    "muscleMass": "Massa Muscolare (kg)",
+    "noMetrics": "Nessuna metrica disponibile"
+  },
+  "patientPsychological": {
+    "noMetrics": "Nessuna metrica psicologica registrata per questo paziente.",
+    "subtitle": "Le metriche verranno generate automaticamente dall'analisi dei messaggi e degli audio vocali.",
+    "totalAnalyses": "Analisi Totali",
+    "averageSentiment": "Sentiment Medio",
+    "dominantMood": "Stato d'Animo Dominante",
+    "mostFrequentEmotion": "Emozione Più Frequente",
+    "sentimentTrend": "Andamento Sentiment nel Tempo",
+    "emotionDistribution": "Distribuzione Emozioni",
+    "historyTitle": "Storico Analisi Psicologiche",
+    "source": "Fonte",
+    "text": "Testo",
+    "audio": "Audio",
+    "dominantEmotion": "Emozione Dominante",
+    "sentiment": "Sentiment",
+    "moodState": "Stato d'Animo",
+    "sentimentScoreLabel": "Sentiment Score (-1 negativo, +1 positivo)",
+    "emotions": {
+      "joy": "Gioia",
+      "sadness": "Tristezza",
+      "anger": "Rabbia",
+      "fear": "Paura",
+      "anxiety": "Ansia",
+      "calm": "Calma",
+      "excitement": "Eccitazione",
+      "neutral": "Neutrale",
+      "frustration": "Frustrazione"
+    },
+    "moods": {
+      "positive": "Positivo",
+      "negative": "Negativo",
+      "neutral": "Neutrale",
+      "anxious": "Ansioso",
+      "mixed": "Misto"
+    }
+  },
+  "agenda": {
+    "title": "Agenda",
+    "events": "Eventi",
+    "noEvents": "Nessun evento disponibile"
+  },
+  "nutrition": {
+    "title": "Nutrizione",
+    "overview": "Panoramica",
+    "planManagement": "Gestione Piani",
+    "templates": "Template",
+    "activePlans": "Piani Attivi",
+    "patientsWithPlans": "Pazienti con Piano",
+    "plansToReview": "Piani da Revisionare",
+    "averageCompliance": "Compliance Media"
+  },
+  "analytics": {
+    "title": "Analisi dati",
+    "overview": "Panoramica",
+    "compliance": "Compliance",
+    "weightLoss": "Perdita Peso",
+    "planEffectiveness": "Efficacia Piani",
+    "riskDistribution": "Distribuzione Rischio"
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "accountSettings": "Impostazioni Account"
+  }
+}
+

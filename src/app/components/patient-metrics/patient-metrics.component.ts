@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PatientDetail, HealthMetric } from '../../models/patient.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
@@ -18,6 +19,7 @@ Chart.register(...registerables);
   standalone: true,
   imports: [
     CommonModule,
+    TranslateModule,
     MatCardModule,
     MatTableModule,
     MatFormFieldModule,
@@ -32,7 +34,7 @@ Chart.register(...registerables);
       <div class="charts-section">
         <mat-card *ngIf="weightChartData.labels && weightChartData.labels.length > 0">
           <mat-card-header>
-            <mat-card-title>Andamento Peso</mat-card-title>
+            <mat-card-title>{{ 'patientMetrics.weightTrend' | translate }}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             <canvas #weightChart></canvas>
@@ -41,7 +43,7 @@ Chart.register(...registerables);
 
         <mat-card *ngIf="hrvChartData.labels && hrvChartData.labels.length > 0">
           <mat-card-header>
-            <mat-card-title>HRV (Heart Rate Variability)</mat-card-title>
+            <mat-card-title>{{ 'patientMetrics.hrvTitle' | translate }}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             <canvas #hrvChart></canvas>
@@ -52,25 +54,25 @@ Chart.register(...registerables);
       <div class="stats-section">
         <mat-card>
           <mat-card-header>
-            <mat-card-title>Statistiche</mat-card-title>
+            <mat-card-title>{{ 'patientMetrics.statistics' | translate }}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             <div class="stat-item" *ngIf="averageWeight > 0">
-              <span class="stat-label">Peso Medio:</span>
+              <span class="stat-label">{{ 'patientMetrics.averageWeight' | translate }}:</span>
               <span class="stat-value">{{ averageWeight.toFixed(1) }} kg</span>
             </div>
             <div class="stat-item" *ngIf="weightChange !== null">
-              <span class="stat-label">Variazione Peso:</span>
+              <span class="stat-label">{{ 'patientMetrics.weightVariation' | translate }}:</span>
               <span class="stat-value" [ngClass]="weightChange >= 0 ? 'positive' : 'negative'">
                 {{ weightChange >= 0 ? '+' : '' }}{{ weightChange.toFixed(1) }} kg
               </span>
             </div>
             <div class="stat-item" *ngIf="averageHRV > 0">
-              <span class="stat-label">HRV Medio:</span>
+              <span class="stat-label">{{ 'patientMetrics.averageHRV' | translate }}:</span>
               <span class="stat-value">{{ averageHRV.toFixed(1) }} ms</span>
             </div>
             <div class="stat-item">
-              <span class="stat-label">Totale Registrazioni:</span>
+              <span class="stat-label">{{ 'patientMetrics.totalRegistrations' | translate }}:</span>
               <span class="stat-value">{{ (patient.health_metrics && patient.health_metrics.length) || 0 }}</span>
             </div>
           </mat-card-content>
@@ -79,35 +81,35 @@ Chart.register(...registerables);
 
       <mat-card class="table-card">
         <mat-card-header>
-          <mat-card-title>Storico Completo</mat-card-title>
+          <mat-card-title>{{ 'patientMetrics.completeHistory' | translate }}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <div *ngIf="filteredMetrics.length === 0" class="no-data">
-            Nessuna metrica disponibile
+            {{ 'patientMetrics.noMetrics' | translate }}
           </div>
           <table mat-table [dataSource]="filteredMetrics" *ngIf="filteredMetrics.length > 0" class="metrics-table">
             <ng-container matColumnDef="date">
-              <th mat-header-cell *matHeaderCellDef>Data</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'common.date' | translate }}</th>
               <td mat-cell *matCellDef="let metric">{{ getFormattedDate(metric.record_date) }}</td>
             </ng-container>
 
             <ng-container matColumnDef="weight">
-              <th mat-header-cell *matHeaderCellDef>Peso (kg)</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'patientMetrics.weight' | translate }}</th>
               <td mat-cell *matCellDef="let metric">{{ metric.weight || '-' }}</td>
             </ng-container>
 
             <ng-container matColumnDef="hrv">
-              <th mat-header-cell *matHeaderCellDef>HRV (ms)</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'patientMetrics.hrv' | translate }}</th>
               <td mat-cell *matCellDef="let metric">{{ metric.hrv || '-' }}</td>
             </ng-container>
 
             <ng-container matColumnDef="body_fat">
-              <th mat-header-cell *matHeaderCellDef>Grasso Corporeo (%)</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'patientMetrics.bodyFat' | translate }}</th>
               <td mat-cell *matCellDef="let metric">{{ metric.body_fat || '-' }}</td>
             </ng-container>
 
             <ng-container matColumnDef="muscle_mass">
-              <th mat-header-cell *matHeaderCellDef>Massa Muscolare (kg)</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'patientMetrics.muscleMass' | translate }}</th>
               <td mat-cell *matCellDef="let metric">{{ metric.muscle_mass || '-' }}</td>
             </ng-container>
 
@@ -200,7 +202,7 @@ export class PatientMetricsComponent implements OnInit, OnChanges, AfterViewInit
   weightChartData: ChartData<'line'> = {
     labels: [] as string[],
     datasets: [{
-      label: 'Peso (kg)',
+      label: 'Weight (kg)',
       data: [],
       borderColor: '#1976d2',
       backgroundColor: 'rgba(25, 118, 210, 0.1)',
@@ -235,6 +237,8 @@ export class PatientMetricsComponent implements OnInit, OnChanges, AfterViewInit
   averageWeight = 0;
   weightChange: number | null = null;
   averageHRV = 0;
+
+  constructor(private translate: TranslateService) {}
 
   ngOnInit(): void {
     if (this.patient) {
@@ -289,7 +293,7 @@ export class PatientMetricsComponent implements OnInit, OnChanges, AfterViewInit
       this.weightChartData = {
         labels: weightLabels,
         datasets: [{
-          label: 'Peso (kg)',
+          label: this.translate.instant('patientMetrics.weight'),
           data: weightData,
           borderColor: '#1976d2',
           backgroundColor: 'rgba(25, 118, 210, 0.1)',
@@ -312,7 +316,7 @@ export class PatientMetricsComponent implements OnInit, OnChanges, AfterViewInit
       this.hrvChartData = {
         labels: hrvLabels,
         datasets: [{
-          label: 'HRV (ms)',
+          label: this.translate.instant('patientMetrics.hrv'),
           data: hrvData,
           borderColor: '#4caf50',
           backgroundColor: 'rgba(76, 175, 80, 0.1)',

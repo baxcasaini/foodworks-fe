@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { TranslateModule } from '@ngx-translate/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -17,30 +18,31 @@ import { MatButtonModule } from '@angular/material/button';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    TranslateModule
   ],
   template: `
     <div class="login-container">
       <mat-card class="login-card">
         <mat-card-header>
-          <mat-card-title>Foodworks Dashboard</mat-card-title>
-          <mat-card-subtitle>Accedi come nutrizionista</mat-card-subtitle>
+          <mat-card-title>{{ 'login.title' | translate }}</mat-card-title>
+          <mat-card-subtitle>{{ 'login.subtitle' | translate }}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
             <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Username</mat-label>
+              <mat-label>{{ 'login.username' | translate }}</mat-label>
               <input matInput formControlName="username" required>
               <mat-error *ngIf="loginForm.get('username')?.hasError('required')">
-                Username obbligatorio
+                {{ 'login.usernameRequired' | translate }}
               </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Password</mat-label>
+              <mat-label>{{ 'login.password' | translate }}</mat-label>
               <input matInput type="password" formControlName="password" required>
               <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
-                Password obbligatoria
+                {{ 'login.passwordRequired' | translate }}
               </mat-error>
             </mat-form-field>
 
@@ -50,7 +52,7 @@ import { MatButtonModule } from '@angular/material/button';
 
             <button mat-raised-button color="primary" type="submit" 
                     [disabled]="loginForm.invalid || loading" class="full-width">
-              {{ loading ? 'Accesso in corso...' : 'Accedi' }}
+              {{ loading ? ('login.loggingIn' | translate) : ('login.loginButton' | translate) }}
             </button>
           </form>
         </mat-card-content>
@@ -120,7 +122,7 @@ export class LoginComponent {
         },
         error: (err) => {
           this.loading = false;
-          this.errorMessage = 'Credenziali non valide. Riprova.';
+          this.errorMessage = '';
           console.error('Login error:', err);
         }
       });

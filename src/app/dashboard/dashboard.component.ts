@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SidebarComponent } from '../components/sidebar/sidebar.component';
 import { HeaderComponent } from '../components/header/header.component';
 import { SummaryCardsComponent } from '../components/summary-cards/summary-cards.component';
@@ -19,16 +20,17 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     HeaderComponent,
     SummaryCardsComponent,
     PatientGridComponent,
-    MatSnackBarModule
+    MatSnackBarModule,
+    TranslateModule
   ],
   template: `
     <div class="dashboard-container">
       <app-sidebar></app-sidebar>
       <div class="main-content">
-        <app-header subtitle="Ecco il Triage Metabolico di oggi. Hai {{ metrics?.urgent_criticalities || 0 }} pazienti che richiedono attenzione."></app-header>
+        <app-header [subtitle]="'dashboard.title' | translate"></app-header>
         <div class="content-area">
           <div *ngIf="loading" class="loading-container">
-            <p>Caricamento dati...</p>
+            <p>{{ 'common.loading' | translate }}</p>
           </div>
           <div *ngIf="!loading">
             <app-summary-cards [metrics]="metrics"></app-summary-cards>
@@ -39,7 +41,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
               (highFive)="handleHighFive($event)">
             </app-patient-grid>
             <div *ngIf="patients.length === 0 && !loading" class="no-patients">
-              <p>Nessun paziente trovato nel database.</p>
+              <p>{{ 'dashboard.noPatients' | translate }}</p>
             </div>
           </div>
         </div>
@@ -87,8 +89,14 @@ export class DashboardComponent implements OnInit {
   constructor(
     private dashboardService: DashboardService,
     private actionsService: ActionsService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) {}
+
+  getDashboardSubtitle(): string {
+    const count = this.metrics?.urgent_criticalities || 0;
+    return this.translate.instant('dashboard.title', { count });
+  }
 
   ngOnInit(): void {
     this.loadDashboardData();
@@ -105,7 +113,7 @@ export class DashboardComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading metrics:', err);
-        this.showError(`Errore nel caricamento delle metriche: ${err.message || 'Errore sconosciuto'}`);
+        this.showError(this.translate.instant('dashboard.errorLoadingMetrics', { error: err.message || this.translate.instant('common.unknownError') }));
         this.loading = false;
       }
     });
@@ -120,7 +128,7 @@ export class DashboardComponent implements OnInit {
       error: (err) => {
         console.error('Error loading patients:', err);
         this.loading = false;
-        this.showError(`Errore nel caricamento dei pazienti: ${err.message || 'Errore sconosciuto'}`);
+        this.showError(this.translate.instant('dashboard.errorLoadingPatients', { error: err.message || this.translate.instant('common.unknownError') }));
         this.patients = [];
       }
     });
@@ -129,11 +137,11 @@ export class DashboardComponent implements OnInit {
   handleQuickCheckin(chatId: string): void {
     this.actionsService.quickCheckin(chatId).subscribe({
       next: () => {
-        this.showSuccess('Check-in rapido inviato con successo');
+        this.showSuccess(this.translate.instant('dashboard.checkinSuccess'));
       },
       error: (err) => {
         console.error('Error sending check-in:', err);
-        this.showError('Errore nell\'invio del check-in');
+        this.showError(this.translate.instant('dashboard.errorSendingCheckin'));
       }
     });
   }
@@ -146,7 +154,7 @@ export class DashboardComponent implements OnInit {
   handleHighFive(chatId: string): void {
     this.actionsService.highFive(chatId).subscribe({
       next: () => {
-        this.showSuccess('Batti 5 inviato! 👋');
+        this.showSuccess(this.translate.instant('dashboard.highFiveSuccess'));
       },
       error: (err) => {
         console.error('Error sending high five:', err);

@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,6 +12,7 @@ import { ChurnIndicatorComponent } from '../churn-indicator/churn-indicator.comp
   standalone: true,
   imports: [
     CommonModule,
+    TranslateModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
@@ -22,7 +24,7 @@ import { ChurnIndicatorComponent } from '../churn-indicator/churn-indicator.comp
         <mat-card-title>{{ patient.name }}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <p class="issue-description">{{ patient.issue_description }}</p>
+        <p class="issue-description">{{ getTranslatedIssue(patient.issue_description) }}</p>
         <app-churn-indicator 
           [score]="patient.churn_score" 
           [riskLevel]="patient.churn_risk_level">
@@ -35,7 +37,7 @@ import { ChurnIndicatorComponent } from '../churn-indicator/churn-indicator.comp
           color="warn"
           (click)="onQuickCheckin()"
           class="action-button">
-          Check-in Rapido
+          {{ 'dashboard.quickCheckin' | translate }}
         </button>
         <button 
           *ngIf="patient.action_type === 'review'"
@@ -43,7 +45,7 @@ import { ChurnIndicatorComponent } from '../churn-indicator/churn-indicator.comp
           color="accent"
           (click)="onModifyPlan()"
           class="action-button">
-          Modifica piano
+          {{ 'dashboard.modifyPlan' | translate }}
         </button>
         <button 
           *ngIf="patient.action_type === 'positive'"
@@ -51,7 +53,7 @@ import { ChurnIndicatorComponent } from '../churn-indicator/churn-indicator.comp
           color="primary"
           (click)="onHighFive()"
           class="action-button">
-          Batti 5 👋
+          {{ 'dashboard.highFive' | translate }}
         </button>
       </mat-card-actions>
     </mat-card>
@@ -93,6 +95,35 @@ export class PatientCardComponent {
   @Output() quickCheckin = new EventEmitter<string>();
   @Output() modifyPlan = new EventEmitter<string>();
   @Output() highFive = new EventEmitter<string>();
+
+  constructor(private translate: TranslateService) {}
+
+  getTranslatedIssue(issue: string): string {
+    // Mappa i testi italiani dal backend alle chiavi di traduzione
+    const issueMap: { [key: string]: string } = {
+      'Peso invariato da': 'patientIssues.weightUnchanged',
+      'Piano da revisionare': 'patientIssues.planToReview',
+      'Record Personale HRV': 'patientIssues.personalHRVRecord',
+      'Alto rischio abbandono': 'patientIssues.highAbandonmentRisk',
+      'Monitoraggio necessario': 'patientIssues.monitoringNeeded',
+      'Nessun problema rilevato': 'patientIssues.noProblemDetected'
+    };
+
+    // Cerca una corrispondenza
+    for (const [italianText, translationKey] of Object.entries(issueMap)) {
+      if (issue.startsWith(italianText)) {
+        // Estrai i giorni se presente
+        const daysMatch = issue.match(/(\d+)/);
+        if (daysMatch && translationKey === 'patientIssues.weightUnchanged') {
+          return this.translate.instant(translationKey, { days: daysMatch[1] });
+        }
+        return this.translate.instant(translationKey);
+      }
+    }
+
+    // Se non trovato, restituisci il testo originale
+    return issue;
+  }
 
   onQuickCheckin(): void {
     this.quickCheckin.emit(this.patient.chat_id);

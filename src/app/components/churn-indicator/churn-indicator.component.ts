@@ -1,14 +1,15 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-churn-indicator',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   template: `
     <div class="churn-indicator">
       <div class="churn-badge" [ngClass]="riskClass">
-        <span class="risk-label">{{ riskLabel }}</span>
+        <span class="risk-label">{{ riskLabel | translate }}</span>
         <span class="risk-score">{{ score }}%</span>
       </div>
     </div>
@@ -63,11 +64,11 @@ export class ChurnIndicatorComponent {
 
   get riskLabel(): string {
     const labels = {
-      low: 'Basso',
-      medium: 'Medio',
-      high: 'Alto'
+      low: 'churn.low',
+      medium: 'churn.medium',
+      high: 'churn.high'
     };
-    return labels[this.riskLevel] || 'Sconosciuto';
+    return labels[this.riskLevel] || 'churn.unknown';
   }
 }
 

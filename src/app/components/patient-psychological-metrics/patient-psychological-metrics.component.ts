@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, AfterViewInit, ViewChild, ElementRef, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PatientDetail, PsychologicalMetric } from '../../models/patient.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
@@ -13,6 +14,7 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
   standalone: true,
   imports: [
     CommonModule,
+    TranslateModule,
     MatCardModule,
     MatTableModule,
     MatChipsModule,
@@ -23,8 +25,8 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
     <div class="psychological-metrics-container">
       <div *ngIf="sortedMetrics.length === 0" class="no-data">
         <mat-icon>psychology</mat-icon>
-        <p>Nessuna metrica psicologica registrata per questo paziente.</p>
-        <p class="subtitle">Le metriche verranno generate automaticamente dall'analisi dei messaggi e degli audio vocali.</p>
+        <p>{{ 'patientPsychological.noMetrics' | translate }}</p>
+        <p class="subtitle">{{ 'patientPsychological.subtitle' | translate }}</p>
       </div>
 
       <div *ngIf="sortedMetrics.length > 0" class="metrics-content">
@@ -34,7 +36,7 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
             <mat-card-content>
               <div class="summary-icon">😊</div>
               <div class="summary-value">{{ averageSentiment.toFixed(2) }}</div>
-              <div class="summary-label">Sentiment Medio</div>
+              <div class="summary-label">{{ 'patientPsychological.averageSentiment' | translate }}</div>
             </mat-card-content>
           </mat-card>
 
@@ -42,7 +44,7 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
             <mat-card-content>
               <div class="summary-icon">{{ getMoodIcon(dominantMoodState) }}</div>
               <div class="summary-value">{{ getMoodLabel(dominantMoodState) }}</div>
-              <div class="summary-label">Stato d'Animo Dominante</div>
+              <div class="summary-label">{{ 'patientPsychological.dominantMood' | translate }}</div>
             </mat-card-content>
           </mat-card>
 
@@ -50,7 +52,7 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
             <mat-card-content>
               <div class="summary-icon">📊</div>
               <div class="summary-value">{{ sortedMetrics.length }}</div>
-              <div class="summary-label">Analisi Totali</div>
+              <div class="summary-label">{{ 'patientPsychological.totalAnalyses' | translate }}</div>
             </mat-card-content>
           </mat-card>
 
@@ -58,7 +60,7 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
             <mat-card-content>
               <div class="summary-icon">🎯</div>
               <div class="summary-value">{{ getTopEmotion() }}</div>
-              <div class="summary-label">Emozione Più Frequente</div>
+              <div class="summary-label">{{ 'patientPsychological.mostFrequentEmotion' | translate }}</div>
             </mat-card-content>
           </mat-card>
         </div>
@@ -67,7 +69,7 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
         <div class="charts-section">
           <mat-card>
             <mat-card-header>
-              <mat-card-title>Andamento Sentiment nel Tempo</mat-card-title>
+              <mat-card-title>{{ 'patientPsychological.sentimentTrend' | translate }}</mat-card-title>
             </mat-card-header>
             <mat-card-content>
               <div class="chart-wrapper">
@@ -78,7 +80,7 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
 
           <mat-card>
             <mat-card-header>
-              <mat-card-title>Distribuzione Emozioni</mat-card-title>
+              <mat-card-title>{{ 'patientPsychological.emotionDistribution' | translate }}</mat-card-title>
             </mat-card-header>
             <mat-card-content>
               <div class="chart-wrapper">
@@ -91,28 +93,29 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
         <!-- Tabella dettagliata -->
         <mat-card class="metrics-table-card">
           <mat-card-header>
-            <mat-card-title>Storico Analisi Psicologiche</mat-card-title>
+            <mat-card-title>{{ 'patientPsychological.historyTitle' | translate }}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             <table mat-table [dataSource]="sortedMetrics" class="full-width-table">
               <ng-container matColumnDef="date">
-                <th mat-header-cell *matHeaderCellDef>Data</th>
+                <th mat-header-cell *matHeaderCellDef>{{ 'common.date' | translate }}</th>
                 <td mat-cell *matCellDef="let metric">{{ getFormattedDate(metric.analysis_date) }}</td>
               </ng-container>
 
               <ng-container matColumnDef="source">
-                <th mat-header-cell *matHeaderCellDef>Fonte</th>
+                <th mat-header-cell *matHeaderCellDef>{{ 'patientPsychological.source' | translate }}</th>
                 <td mat-cell *matCellDef="let metric">
                   <mat-chip-listbox>
                     <mat-chip [color]="metric.source_type === 'voice' ? 'primary' : 'accent'" selected>
-                      {{ metric.source_type === 'voice' ? '🎤 Audio' : '💬 Testo' }}
+                      <span *ngIf="metric.source_type === 'voice'">🎤 {{ 'patientPsychological.audio' | translate }}</span>
+                      <span *ngIf="metric.source_type === 'text'">💬 {{ 'patientPsychological.text' | translate }}</span>
                     </mat-chip>
                   </mat-chip-listbox>
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="dominant_emotion">
-                <th mat-header-cell *matHeaderCellDef>Emozione Dominante</th>
+                <th mat-header-cell *matHeaderCellDef>{{ 'patientPsychological.dominantEmotion' | translate }}</th>
                 <td mat-cell *matCellDef="let metric">
                   <mat-chip-listbox>
                     <mat-chip [ngClass]="getEmotionClass(metric.dominant_emotion)" selected>
@@ -123,7 +126,7 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
               </ng-container>
 
               <ng-container matColumnDef="sentiment">
-                <th mat-header-cell *matHeaderCellDef>Sentiment</th>
+                <th mat-header-cell *matHeaderCellDef>{{ 'patientPsychological.sentiment' | translate }}</th>
                 <td mat-cell *matCellDef="let metric">
                   <div class="sentiment-bar">
                     <div class="sentiment-fill" 
@@ -136,7 +139,7 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
               </ng-container>
 
               <ng-container matColumnDef="mood">
-                <th mat-header-cell *matHeaderCellDef>Stato d'Animo</th>
+                <th mat-header-cell *matHeaderCellDef>{{ 'patientPsychological.moodState' | translate }}</th>
                 <td mat-cell *matCellDef="let metric">
                   <mat-chip-listbox>
                     <mat-chip [ngClass]="getMoodClass(metric.mood_state)" selected>
@@ -300,6 +303,8 @@ export class PatientPsychologicalMetricsComponent implements OnInit, AfterViewIn
   @Input() patient!: PatientDetail;
   @ViewChild('sentimentChart', { static: false }) sentimentChartRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('emotionsChart', { static: false }) emotionsChartRef!: ElementRef<HTMLCanvasElement>;
+
+  constructor(private translate: TranslateService) {}
 
   private sentimentChart?: Chart;
   private emotionsChart?: Chart;
@@ -475,7 +480,7 @@ export class PatientPsychologicalMetricsComponent implements OnInit, AfterViewIn
                 max: 1,
                 title: {
                   display: true,
-                  text: 'Sentiment Score (-1 negativo, +1 positivo)'
+                  text: this.translate.instant('patientPsychological.sentimentScoreLabel')
                 }
               }
             }
@@ -640,18 +645,10 @@ export class PatientPsychologicalMetricsComponent implements OnInit, AfterViewIn
   }
 
   getEmotionLabel(emotion: string): string {
-    const labels: { [key: string]: string } = {
-      'joy': 'Gioia',
-      'sadness': 'Tristezza',
-      'anger': 'Rabbia',
-      'fear': 'Paura',
-      'anxiety': 'Ansia',
-      'calm': 'Calma',
-      'excitement': 'Eccitazione',
-      'neutral': 'Neutrale',
-      'frustration': 'Frustrazione'
-    };
-    return labels[emotion] || emotion;
+    const translationKey = `patientPsychological.emotions.${emotion}`;
+    const translated = this.translate.instant(translationKey);
+    // Se la traduzione non esiste, restituisci la chiave originale
+    return translated !== translationKey ? translated : emotion;
   }
 
   getEmotionClass(emotion: string): string {
@@ -674,14 +671,10 @@ export class PatientPsychologicalMetricsComponent implements OnInit, AfterViewIn
   }
 
   getMoodLabel(mood: string): string {
-    const labels: { [key: string]: string } = {
-      'positive': 'Positivo',
-      'negative': 'Negativo',
-      'neutral': 'Neutrale',
-      'anxious': 'Ansioso',
-      'mixed': 'Misto'
-    };
-    return labels[mood] || mood;
+    const translationKey = `patientPsychological.moods.${mood}`;
+    const translated = this.translate.instant(translationKey);
+    // Se la traduzione non esiste, restituisci la chiave originale
+    return translated !== translationKey ? translated : mood;
   }
 
   getMoodClass(mood: string): string {

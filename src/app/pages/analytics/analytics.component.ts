@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { HeaderComponent } from '../../components/header/header.component';
 import { MatCardModule } from '@angular/material/card';
@@ -15,6 +16,7 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
   standalone: true,
   imports: [
     CommonModule,
+    TranslateModule,
     SidebarComponent,
     HeaderComponent,
     MatCardModule,
@@ -26,11 +28,11 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
     <div class="analytics-container">
       <app-sidebar></app-sidebar>
       <div class="main-content">
-        <app-header subtitle="Analisi dati e statistiche avanzate"></app-header>
+        <app-header [subtitle]="'analytics.subtitle' | translate"></app-header>
         <div class="content-area">
           <div *ngIf="loading" class="loading-container">
             <mat-spinner></mat-spinner>
-            <p>Caricamento analisi...</p>
+            <p>{{ 'analytics.loading' | translate }}</p>
           </div>
 
           <div *ngIf="!loading && analyticsData" class="analytics-content">
@@ -40,7 +42,7 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
                 <mat-card-content>
                   <div class="card-icon">👥</div>
                   <div class="card-value">{{ analyticsData.overview.total_patients }}</div>
-                  <div class="card-label">Pazienti Totali</div>
+                  <div class="card-label">{{ 'analytics.totalPatients' | translate }}</div>
                 </mat-card-content>
               </mat-card>
 
@@ -48,7 +50,7 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
                 <mat-card-content>
                   <div class="card-icon">✅</div>
                   <div class="card-value">{{ analyticsData.overview.active_patients }}</div>
-                  <div class="card-label">Pazienti Attivi</div>
+                  <div class="card-label">{{ 'analytics.activePatients' | translate }}</div>
                 </mat-card-content>
               </mat-card>
 
@@ -56,7 +58,7 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
                 <mat-card-content>
                   <div class="card-icon">🆕</div>
                   <div class="card-value">{{ analyticsData.overview.new_patients_last_month }}</div>
-                  <div class="card-label">Nuovi (Ultimo Mese)</div>
+                  <div class="card-label">{{ 'analytics.newLastMonth' | translate }}</div>
                 </mat-card-content>
               </mat-card>
 
@@ -64,7 +66,7 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
                 <mat-card-content>
                   <div class="card-icon">📊</div>
                   <div class="card-value">{{ analyticsData.overview.average_churn_score }}</div>
-                  <div class="card-label">Churn Score Medio</div>
+                  <div class="card-label">{{ 'analytics.averageChurnScore' | translate }}</div>
                 </mat-card-content>
               </mat-card>
             </div>
@@ -72,22 +74,22 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
             <!-- Tabs per diverse analisi -->
             <mat-tab-group animationDuration="0ms">
               <!-- Tab Compliance -->
-              <mat-tab label="Compliance">
+              <mat-tab [label]="'analytics.compliance' | translate">
                 <div class="tab-content">
                   <div class="stats-grid">
                     <mat-card>
                       <mat-card-header>
-                        <mat-card-title>Compliance Media</mat-card-title>
+                        <mat-card-title>{{ 'analytics.averageCompliance' | translate }}</mat-card-title>
                       </mat-card-header>
                       <mat-card-content>
                         <div class="big-number">{{ analyticsData.compliance.average_compliance.toFixed(1) }}%</div>
                         <div class="stat-details">
                           <div class="stat-item">
-                            <span class="stat-label">Sopra soglia (≥70%):</span>
+                            <span class="stat-label">{{ 'analytics.aboveThreshold' | translate }}</span>
                             <span class="stat-value positive">{{ analyticsData.compliance.patients_above_threshold }}</span>
                           </div>
                           <div class="stat-item">
-                            <span class="stat-label">Sotto soglia (&lt;70%):</span>
+                            <span class="stat-label">{{ 'analytics.belowThreshold' | translate }}</span>
                             <span class="stat-value negative">{{ analyticsData.compliance.patients_below_threshold }}</span>
                           </div>
                         </div>
@@ -96,7 +98,7 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
 
                     <mat-card>
                       <mat-card-header>
-                        <mat-card-title>Trend Compliance (12 Mesi)</mat-card-title>
+                        <mat-card-title>{{ 'analytics.complianceTrend' | translate }}</mat-card-title>
                       </mat-card-header>
                       <mat-card-content>
                         <div class="chart-wrapper">
@@ -109,26 +111,26 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
               </mat-tab>
 
               <!-- Tab Perdita Peso -->
-              <mat-tab label="Perdita Peso">
+              <mat-tab [label]="'analytics.weightLoss' | translate">
                 <div class="tab-content">
                   <div class="stats-grid">
                     <mat-card>
                       <mat-card-header>
-                        <mat-card-title>Statistiche Perdita Peso</mat-card-title>
+                        <mat-card-title>{{ 'analytics.weightLossStats' | translate }}</mat-card-title>
                       </mat-card-header>
                       <mat-card-content>
                         <div class="big-number">{{ analyticsData.weight_loss.total_weight_loss.toFixed(1) }} kg</div>
                         <div class="stat-details">
                           <div class="stat-item">
-                            <span class="stat-label">Perdita media per paziente:</span>
+                            <span class="stat-label">{{ 'analytics.averagePerPatient' | translate }}</span>
                             <span class="stat-value">{{ analyticsData.weight_loss.average_weight_loss_per_patient.toFixed(1) }} kg</span>
                           </div>
                           <div class="stat-item">
-                            <span class="stat-label">Con progressi:</span>
+                            <span class="stat-label">{{ 'analytics.withProgress' | translate }}</span>
                             <span class="stat-value positive">{{ analyticsData.weight_loss.patients_with_progress }}</span>
                           </div>
                           <div class="stat-item">
-                            <span class="stat-label">Senza progressi:</span>
+                            <span class="stat-label">{{ 'analytics.withoutProgress' | translate }}</span>
                             <span class="stat-value negative">{{ analyticsData.weight_loss.patients_without_progress }}</span>
                           </div>
                         </div>
@@ -137,7 +139,7 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
 
                     <mat-card>
                       <mat-card-header>
-                        <mat-card-title>Trend Perdita Peso (6 Mesi)</mat-card-title>
+                        <mat-card-title>{{ 'analytics.weightLossTrend' | translate }}</mat-card-title>
                       </mat-card-header>
                       <mat-card-content>
                         <div class="chart-wrapper">
@@ -150,22 +152,22 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
               </mat-tab>
 
               <!-- Tab Efficacia Piani -->
-              <mat-tab label="Efficacia Piani">
+              <mat-tab [label]="'analytics.planEffectiveness' | translate">
                 <div class="tab-content">
                   <div class="stats-grid">
                     <mat-card>
                       <mat-card-header>
-                        <mat-card-title>Piano Più Efficace</mat-card-title>
+                        <mat-card-title>{{ 'analytics.mostEffectivePlan' | translate }}</mat-card-title>
                       </mat-card-header>
                       <mat-card-content>
                         <div class="big-number highlight">{{ analyticsData.plan_effectiveness.most_effective_plan_type }}</div>
-                        <p class="subtitle">Tasso di successo più alto</p>
+                        <p class="subtitle">{{ 'analytics.highestSuccessRate' | translate }}</p>
                       </mat-card-content>
                     </mat-card>
 
                     <mat-card>
                       <mat-card-header>
-                        <mat-card-title>Tasso di Successo per Tipo</mat-card-title>
+                        <mat-card-title>{{ 'analytics.successRateByType' | translate }}</mat-card-title>
                       </mat-card-header>
                       <mat-card-content>
                         <div class="chart-wrapper">
@@ -176,7 +178,7 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
 
                     <mat-card>
                       <mat-card-header>
-                        <mat-card-title>Durata Media per Tipo</mat-card-title>
+                        <mat-card-title>{{ 'analytics.averageDurationByType' | translate }}</mat-card-title>
                       </mat-card-header>
                       <mat-card-content>
                         <div class="chart-wrapper">
@@ -189,12 +191,12 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
               </mat-tab>
 
               <!-- Tab Distribuzione Rischio -->
-              <mat-tab label="Distribuzione Rischio">
+              <mat-tab [label]="'analytics.riskDistribution' | translate">
                 <div class="tab-content">
                   <div class="stats-grid">
                     <mat-card>
                       <mat-card-header>
-                        <mat-card-title>Distribuzione per Livello di Rischio</mat-card-title>
+                        <mat-card-title>{{ 'analytics.riskDistributionByLevel' | translate }}</mat-card-title>
                       </mat-card-header>
                       <mat-card-content>
                         <div class="chart-wrapper">
@@ -203,15 +205,15 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
                         <div class="risk-legend">
                           <div class="risk-item">
                             <span class="risk-color high"></span>
-                            <span>Alto: {{ analyticsData.overview.patients_by_risk_level['high'] || 0 }}</span>
+                            <span>{{ 'analytics.high' | translate }}: {{ analyticsData.overview.patients_by_risk_level['high'] || 0 }}</span>
                           </div>
                           <div class="risk-item">
                             <span class="risk-color medium"></span>
-                            <span>Medio: {{ analyticsData.overview.patients_by_risk_level['medium'] || 0 }}</span>
+                            <span>{{ 'analytics.medium' | translate }}: {{ analyticsData.overview.patients_by_risk_level['medium'] || 0 }}</span>
                           </div>
                           <div class="risk-item">
                             <span class="risk-color low"></span>
-                            <span>Basso: {{ analyticsData.overview.patients_by_risk_level['low'] || 0 }}</span>
+                            <span>{{ 'analytics.low' | translate }}: {{ analyticsData.overview.patients_by_risk_level['low'] || 0 }}</span>
                           </div>
                         </div>
                       </mat-card-content>
@@ -223,7 +225,7 @@ import Chart, { ChartData, ChartConfiguration } from 'chart.js/auto';
           </div>
 
           <div *ngIf="!loading && !analyticsData" class="error-container">
-            <p>Errore nel caricamento dei dati di analisi.</p>
+            <p>{{ 'analytics.errorLoading' | translate }}</p>
             <button mat-button (click)="loadAnalytics()">Riprova</button>
           </div>
         </div>
@@ -415,7 +417,10 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
   private durationChart?: Chart;
   private riskDistributionChart?: Chart;
 
-  constructor(private analyticsService: AnalyticsService) {}
+  constructor(
+    private analyticsService: AnalyticsService,
+    private translate: TranslateService
+  ) {}
 
   ngOnInit(): void {
     this.loadAnalytics();
@@ -634,7 +639,10 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
       this.riskDistributionChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: riskLevels.map(r => r === 'high' ? 'Alto' : r === 'medium' ? 'Medio' : 'Basso'),
+          labels: riskLevels.map(r => {
+            const key = r === 'high' ? 'analytics.high' : r === 'medium' ? 'analytics.medium' : 'analytics.low';
+            return this.translate.instant(key);
+          }),
           datasets: [{
             data: counts,
             backgroundColor: ['#f44336', '#ff9800', '#4caf50']

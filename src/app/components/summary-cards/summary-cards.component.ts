@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { DashboardMetrics } from '../../models/dashboard.model';
@@ -7,7 +8,7 @@ import { DashboardMetrics } from '../../models/dashboard.model';
 @Component({
   selector: 'app-summary-cards',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatIconModule],
+  imports: [CommonModule, MatCardModule, MatIconModule, TranslateModule],
   template: `
     <div class="summary-cards">
       <mat-card class="summary-card urgent">
@@ -16,7 +17,7 @@ import { DashboardMetrics } from '../../models/dashboard.model';
             <mat-icon>warning</mat-icon>
           </div>
           <div class="card-info">
-            <h3>Criticità urgenti</h3>
+            <h3>{{ 'dashboard.urgentCriticalities' | translate }}</h3>
             <p class="card-value">{{ metrics?.urgent_criticalities || 0 }}</p>
           </div>
         </div>
@@ -28,7 +29,7 @@ import { DashboardMetrics } from '../../models/dashboard.model';
             <mat-icon>folder</mat-icon>
           </div>
           <div class="card-info">
-            <h3>Piani da revisionare</h3>
+            <h3>{{ 'dashboard.plansToReview' | translate }}</h3>
             <p class="card-value">{{ metrics?.plans_to_review || 0 }}</p>
           </div>
         </div>
@@ -40,7 +41,7 @@ import { DashboardMetrics } from '../../models/dashboard.model';
             <mat-icon>trending_up</mat-icon>
           </div>
           <div class="card-info">
-            <h3>Retention pazienti</h3>
+            <h3>{{ 'dashboard.patientRetention' | translate }}</h3>
             <p class="card-value">{{ metrics?.patient_retention || 0 }}%</p>
           </div>
         </div>
